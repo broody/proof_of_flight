@@ -7,7 +7,7 @@ struct Origin {
     latitude: u32,
 }
 
-#[derive(Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum Status {
     Planning,
     Completed,
@@ -17,9 +17,8 @@ enum Status {
 struct Flight {
     #[key]
     flight_id: u32,
-    #[key]
-    pilot: ContractAddress,
     source_flight_id: u32,
+    pilot: ContractAddress,
     status: Status,
     origin: Origin,
     offset: Coordinate,
