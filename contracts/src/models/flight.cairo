@@ -1,4 +1,5 @@
 use starknet::ContractAddress;
+use proof_of_flight::models::spaxel::Coordinate;
 
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Origin {
@@ -6,14 +7,23 @@ struct Origin {
     latitude: u32,
 }
 
+#[derive(Copy, Drop, Serde, Introspect)]
+enum Status {
+    Planning,
+    Completed,
+}
+
 #[derive(Model, Copy, Drop, Serde)]
 struct Flight {
     #[key]
-    pilot: ContractAddress,
-    #[key]
     flight_id: u32,
+    #[key]
+    pilot: ContractAddress,
+    source_flight_id: u32,
+    status: Status,
     origin: Origin,
-    rotation: u32,
-    is_sealed: bool,
+    offset: Coordinate,
+    rotation: u16,
+    scale: u16,
     total_spaxels: u16,
 }

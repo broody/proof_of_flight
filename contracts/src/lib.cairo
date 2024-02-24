@@ -1,6 +1,6 @@
 mod systems {
     mod flight;
-//mod spaxel;
+mod spaxel;
 }
 
 mod models {
