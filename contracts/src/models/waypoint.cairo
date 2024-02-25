@@ -12,18 +12,21 @@ struct Color {
     r: u8,
     g: u8,
     b: u8,
+    mode: TransitionMode,
+}
+
+#[derive(Copy, Drop, Serde, Introspect)]
+enum TransitionMode {
+    Immediate,
+    Gradual,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
-struct Spaxel {
-    #[key]
-    spaxel_id: u32,
+struct Waypoint {
     #[key]
     flight_id: u32,
     #[key]
-    coordinate_idx: u32,
+    coordinate_idx: u16,
     coordinate: Coordinate,
     color: Color,
-        total_coordinates: u16,
-
 }

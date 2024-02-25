@@ -1,9 +1,11 @@
 mod systems {
     mod flight;
-mod spaxel;
+    mod waypoint;
 }
 
 mod models {
     mod flight;
-    mod spaxel;
+    mod waypoint;
 }
+
+mod errors;

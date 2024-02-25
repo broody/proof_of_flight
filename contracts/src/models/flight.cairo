@@ -1,5 +1,5 @@
 use starknet::ContractAddress;
-use proof_of_flight::models::spaxel::Coordinate;
+use proof_of_flight::models::waypoint::Coordinate;
 
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Origin {
@@ -24,5 +24,5 @@ struct Flight {
     offset: Coordinate,
     rotation: u16,
     scale: u16,
-    total_spaxels: u16,
+    total_waypoints: u16,
 }

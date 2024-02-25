@@ -1,5 +1,5 @@
 use proof_of_flight::models::flight::Origin;
-use proof_of_flight::models::spaxel::Coordinate;
+use proof_of_flight::models::waypoint::Coordinate;
 
 #[starknet::interface]
 trait IFlightSystem<TContractState> {
@@ -23,16 +23,10 @@ mod flight {
     use core::zeroable::Zeroable;
     use starknet::{ContractAddress, get_caller_address};
     use proof_of_flight::models::flight::{Flight, Status};
-
-    mod Errors {
-        const INVALID_SOURCE_FLIGHT: felt252 = 'Invalid source flight';
-        const UNAUTHORIZED_PILOT: felt252 = 'Unauthorized pilot';
-        const FLIGHT_COMPLETED: felt252 = 'Flight completed';
-    }
-
+    use proof_of_flight::errors;
 
     #[abi(embed_v0)]
-    impl FlightSystemsImpl of IFlightSystem<ContractState> {
+    impl FlightSystemImpl of IFlightSystem<ContractState> {
         fn create(self: @ContractState, origin: Origin, source_flight_id: Option<u32>) {
             let world = self.world_dispatcher.read();
             
@@ -48,7 +42,7 @@ mod flight {
                         offset: Coordinate { x: 0, y: 0, z: 0 },
                         rotation: 0,
                         scale: 0,
-                        total_spaxels: 0,
+                        total_waypoints: 0,
                     }
                 )
             )
@@ -67,8 +61,8 @@ mod flight {
             let pilot = get_caller_address();
             let mut flight = get!(world, flight_id, (Flight));
 
-            assert(flight.pilot == pilot, Errors::UNAUTHORIZED_PILOT);
-            assert(flight.status != Status::Completed, Errors::FLIGHT_COMPLETED);
+            assert(flight.pilot == pilot, errors::UNAUTHORIZED_PILOT);
+            assert(flight.status != Status::Completed, errors::CANNOT_UPDATE);
 
             if origin.is_some() {
                 flight.origin = origin.unwrap();
@@ -94,7 +88,7 @@ mod flight {
             let pilot = get_caller_address();
             let mut flight = get!(world, flight_id, (Flight));
 
-            assert(flight.pilot == pilot, Errors::UNAUTHORIZED_PILOT);
+            assert(flight.pilot == pilot, errors::UNAUTHORIZED_PILOT);
 
             // GENERATE PROOF OF FLIGHT NFT
 
