@@ -16,10 +16,16 @@ trait IWaypointSystem<TContractState> {
         coordinate: Option<Coordinate>,
         color: Option<Color>,
     );
+    fn get(
+        self: @TContractState,
+        flight_id: u32,
+    ) -> Array<(Coordinate, Color)>;
 }
 
 #[dojo::contract]
-mod waypoint {
+mod waypoint_system {
+    use starknet::Zeroable;
+    use core::array::ArrayTrait;
     use super::{IWaypointSystem, Coordinate, Color, Waypoint};
 
     use core::traits::{Into, TryInto};
@@ -47,7 +53,7 @@ mod waypoint {
             loop {
                 set!(world, Waypoint {
                     flight_id,
-                    coordinate_idx: idx,
+                    coordinate_idx: flight.total_waypoints + idx,
                     coordinate: *coordinates.at(idx.into()),
                     color: *colors.at(idx.into()),
                 });
@@ -57,7 +63,7 @@ mod waypoint {
                     break;
                 }
             };
-
+            
             flight.total_waypoints += idx;
             set!(world, (flight));
         }
@@ -87,6 +93,26 @@ mod waypoint {
             }
 
             set!(world, (flight, waypoint));
-        }        
+        }      
+
+        fn get(
+            self: @ContractState,
+            flight_id: u32,
+        ) -> Array<(Coordinate, Color)> {
+            let world = self.world_dispatcher.read();
+            let mut waypoints = ArrayTrait::<(Coordinate, Color)>::new();
+            let mut idx = 0;
+            loop {
+                let waypoint = get!(world, (flight_id, idx), (Waypoint));
+                if waypoint.coordinate.is_zero() {
+                    break;
+                }
+
+                waypoints.append((waypoint.coordinate, waypoint.color));
+                idx += 1;
+            };
+
+            waypoints
+        }  
     }
 }

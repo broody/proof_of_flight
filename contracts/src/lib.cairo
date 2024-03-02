@@ -8,4 +8,8 @@ mod models {
     mod waypoint;
 }
 
+mod tests {
+    mod test_systems;
+}
+
 mod errors;

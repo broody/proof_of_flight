@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use proof_of_flight::models::waypoint::Coordinate;
 
-#[derive(Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 struct Origin {
     longitude: u32,
     latitude: u32,

@@ -1,7 +1,7 @@
 [package]
-cairo-version = "2.4.0"
+cairo-version = "2.1.0"
 name = "proof_of_flight"
-version = "0.5.0"
+version = "0.1.0"
 # Use the prelude with the less imports as possible
 # from corelib.
 edition = "2023_10"
@@ -10,8 +10,7 @@ edition = "2023_10"
 sierra-replace-ids = true
 
 [dependencies]
-dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.6.0-alpha.0"}
-token = { git = "https://github.com/dojoengine/origami.git" }
+dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.6.0-alpha.2"}
 
 [[target.dojo]]
 build-external-contracts = [  ]
@@ -21,9 +20,9 @@ description = "Drone Light Painting on Starknet built using Dojo Engine"
 name = "Proof of Flight"
 
 [tool.dojo.env]
-rpc_url = "http://localhost:5050/"
+rpc_url = "http://localhost:5050"
 
 # Default account for katana with seed = 0
 account_address = "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03"
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
-world_address = "0x33ac2f528bb97cc7b79148fd1756dc368be0e95d391d8c6d6473ecb60b4560e"
+world_address = "0x32f96664c85861e672a6ec78ad7c6b4e502c6b40408c2f5c06c1a5bba81dca2"

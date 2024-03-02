@@ -1,5 +1,6 @@
 use proof_of_flight::models::flight::Origin;
 use proof_of_flight::models::waypoint::Coordinate;
+use proof_of_flight::models::flight::Flight;
 
 #[starknet::interface]
 trait IFlightSystem<TContractState> {
@@ -13,11 +14,12 @@ trait IFlightSystem<TContractState> {
         scale: Option<u16>,
     );
     fn complete(self: @TContractState, flight_id: u32);
+    fn get(self: @TContractState, flight_id: u32) -> Flight;
 }
 
 
 #[dojo::contract]
-mod flight {
+mod flight_system {
     use super::{IFlightSystem, Origin, Coordinate};
 
     use core::zeroable::Zeroable;
@@ -94,6 +96,11 @@ mod flight {
 
             flight.status = Status::Completed;
             set!( world, (flight));
+        }
+
+        fn get(self: @ContractState, flight_id: u32) -> Flight {
+            let world = self.world_dispatcher.read();
+            get!(world, flight_id, (Flight))
         }
     }
 }
